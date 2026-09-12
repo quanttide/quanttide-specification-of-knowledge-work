@@ -7,6 +7,7 @@
 工作流是一份 YAML，落在数据仓的 `workflows/<工作流>.yaml`，文件名即工作流名。
 
 ```yaml
+name: 工作流名
 description: 一句话说清这条工作流干什么
 steps:
   - name: 步骤名
@@ -17,7 +18,7 @@ steps:
         path: data/journal/README.md
 ```
 
-顶层两个字段：`description` 与 `steps`。一条工作流至少一个步骤，步骤的顺序即衔接的顺序。
+顶层三个字段：`name`、`description` 与 `steps`。`name` 即工作流名，与文件名一致。一条工作流至少一个步骤，步骤的顺序即衔接的顺序。
 
 步骤四个字段：`name`（必填）、`description`、`executor`、`criteria`。`executor` 答谁做这一步，取 `agent` 或 `human`，缺省为 `agent`。
 

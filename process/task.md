@@ -19,7 +19,7 @@ log:
     ok: true
 ```
 
-字段：`name`、`start`、`workflow`、运行上下文（`root` / `data` / `workflows`）、`log`（流水）、`gates`（闸门项）、`artifacts`（这次执行往哪写产物，可省）。
+字段：`name`、`start`、`workflow`、运行上下文（`root` / `data` / `workflows`，即 [工作区](../place/workspace.md) 的三处坐标）、`log`（流水）、`gates`（闸门项）、`artifacts`（这次执行往哪写产物，可省）。
 
 `workflow` 指向它执行的工作流，是任务与工作流之间唯一的链接；`start` 记开工时间。
 

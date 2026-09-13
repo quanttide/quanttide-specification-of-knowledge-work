@@ -1,40 +1,65 @@
 # 工作流
 
-工作流（Workflow）是过程的编排定义：以有向无环图描述任务之间的衔接。
+工作流（Workflow）是过程的定义：一串有序的步骤，每步写着谁做与怎么算完。一份定义可以起多件任务，任务照着它走一遍（见 [任务](./task.md)）。
 
-## 语法
+## 领域属性
 
-工作流是一份 YAML，文件名即工作流名。
+### 字段
 
-```yaml
-name: 工作流名
-description: 一句话说清这条工作流干什么
-steps:
-  - name: 步骤名
-    description: 这一步做什么
-    executor: agent
-    criteria:
-      - executor: rule
-        path: data/journal/README.md
-```
+工作流落成一份 YAML 文件，文件名即工作流名：
 
-顶层三个字段：`name`、`description` 与 `steps`。`name` 即工作流名，与文件名一致。一条工作流至少一个步骤，步骤的顺序即衔接的顺序。
+- `name`（String，必选）：工作流名，在其所属工作区内唯一。
+- `description`（String，推荐）：一句话说清这条工作流干什么，默认为空。
+- `steps`（List，必选）：步骤列表，至少一条，顺序即衔接顺序。
+- `steps[].name`（String，必选）：步骤名。
+- `steps[].description`（String，推荐）：这一步做什么，给执行者看，默认为空。
+- `steps[].executor`（String，推荐）：谁做这一步，取 `agent` 或 `human`，缺省 `agent`。
+- `steps[].criteria`（List，推荐）：判据列表，怎么算这一步走完，默认为空。
+- `steps[].criteria[].executor`（String，必选）：谁判这一条，取 `rule`、`agent` 或 `human`。
+- `steps[].criteria[].description`（String，推荐）：给智能体或人的判准，默认为空；省了按判法生成一句。
+- `steps[].criteria[].path`（String，推荐）：`rule` 判法，取路径存在。
+- `steps[].criteria[].absent`（String，推荐）：`rule` 判法，取路径不存在。
+- `steps[].criteria[].file` 与 `contains`（String，推荐）：`rule` 判法，成对写，取文件含这段文字。
+- `steps[].criteria[].run`（String，推荐）：`rule` 判法，取命令退出码为零。
 
-步骤四个字段：`name`（必填）、`description`、`executor`、`criteria`。`executor` 答谁做这一步，取 `agent` 或 `human`，缺省为 `agent`。
+### 关联
 
-判据三个字段：`executor`（必填）、`description`、判法。`executor` 答谁判这一条，取 `rule`、`agent` 或 `human`。判据为 `rule` 时必须且只能写一种判法：`path` 取路径存在，`absent` 取路径不存在，`file` 与 `contains` 成对取文件含这段文字，`run` 取命令退出码为零；判据为 `agent` 或 `human` 时只写 `description`，前者是给智能体的判准，后者是留给人拍板的事项。
+工作流隶属工作区，被任务的 `workflow` 字段按名字引用（见 [工作区](../place/workspace.md)）。
 
-`description` 可省，省去时按判法生成一句。
+判据里的路径指向区内工件，相对路径的基准由平台给出。路径里可写四个占位，任务执行时换成本次任务的落点：`{{report}}`、`{{journal}}` 是这两样产物的落点，`{{log}}` 是任务文件本身，`{{artifacts}}` 是产物目录（落点见 [任务](./task.md)）。占位只认这四个，写了别的视为不合语法。
 
-字段取值之外一律拒绝：出现不认识的字段、缺必填字段、取值不在枚举内，均视为不合语法。
+### 约束
 
-判据里的路径是相对路径，基准由平台给出。路径里可写四个占位，在任务执行时换成本次任务的落点：`{{report}}`、`{{journal}}` 是这两样产物的落点，`{{log}}` 是任务文件本身，`{{artifacts}}` 是产物目录（落点见 [任务](./task.md)·语法）。占位只认这四个；写了别的（如 `{{foo}}`）视为不合语法。
+- 字段取值之外一律拒绝：出现不认识的字段、缺必填字段、取值不在枚举内，均视为不合语法；
+- `rule` 判据必须且只能写一种判法；`agent` 或 `human` 判据只写 `description`，不带判法字段——前者是给智能体的判准，后者是留给人拍板的事项；
+- 定义要能对着工作区核一遍：`path` 与 `file` 判据里的路径须在区内，`description` 里提到的小节须有 `contains` 判据覆盖；
+- 带占位的路径要等任务执行时才落，核对记「未核」；核对不访问文件系统，在不在由端侧判断。
 
-## 定义核对
+## 领域事件
 
-定义除了语法，还要能对着工作区核一遍（`workflow --check` 一类命令）。核两件事：
+### 事件
 
-- **判据里的路径在不在**：取 `path` 与 `file` 两类 `rule` 判据里写的路径，看它在不在（相对路径的基准由平台给）。带 `{{report}}`、`{{journal}}`、`{{log}}`、`{{artifacts}}` 占位的判据跳过——那几处要等任务执行时才落，核对时给一条「未核」的回执。
-- **描述提到的小节有没有判据覆盖**：`description` 里以 `## 小节名` 或「小节名」一节写到的报告小节，应当有 `contains` 判据核到；没有就是没覆盖。
+- 工作流已创建（`WorkflowCreated`）
 
-核对结果是一条条回执：在哪里、核什么、过没过；没核的记「未核」。核对不访问文件系统，「在不在」由端侧判断。
+### 约束
+
+- 事件负载至少携带工作流名与工作区 `id`，供下游投影、汇总与审计使用。
+
+## API端点
+
+工作流建模为 REST 资源，端点挂载于工作区之下：定义认名字，跨区互不可见。
+
+### 工作流资源端点
+
+- `POST /workspaces/{workspace_id}/workflows`：创建工作流。
+- `GET /workspaces/{workspace_id}/workflows`：列出工作区下的工作流。
+- `GET /workspaces/{workspace_id}/workflows/{name}`：读取单个工作流。
+
+### 子资源端点
+
+工作流不设子资源端点：步骤与判据内嵌在定义里。
+
+### 约束
+
+- 创建工作流撞上区内同名即拒绝，不覆盖；
+- 无状态、幂等键等 API 口径见 [工作区](../place/workspace.md)。

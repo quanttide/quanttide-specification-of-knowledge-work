@@ -30,21 +30,22 @@
 ### 事件
 
 - 工作区已创建（`WorkspaceCreated`）
+- 工作区已更新（`WorkspaceUpdated`）
 
 ### 约束
 
 - 工作区已创建先于其内一切事件——材料已收录、工作流已创建、任务已启动或已完成、产物已生成或已验收，均以工作区已创建为前提；
 - 事件负载至少携带工作区 `id`，供下游投影、汇总与审计使用。
 
-## API 规格
+## API端点
 
 工作区建模为 REST 资源。集合端点挂载于工作台之下，以体现一对多层级；单个端点挂载于根路径，便于跨工作台引用。
 
-### 工作区资源
+### 工作区资源端点
 
 - `POST /workbenches/{workbench_id}/workspaces`：创建工作区。
-- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区；
-- `GET /workspaces/{id}`：读取单个工作区；
+- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区。
+- `GET /workspaces/{id}`：读取单个工作区。
 - `PATCH /workspaces/{id}`：更新工作区信息。
 
 ### 子资源端点

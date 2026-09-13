@@ -33,7 +33,7 @@
 
 ### 约束
 
-- 工作区已创建先于其内一切事件——材料已收录、工作流已创建、任务已启动／已完成、产物已生成／已验收，均以工作区已创建为前提；
+- 工作区已创建先于其内一切事件——材料已收录、工作流已创建、任务已启动或已完成、产物已生成或已验收，均以工作区已创建为前提；
 - 事件负载至少携带工作区 `id`，供下游投影、汇总与审计使用。
 
 ## API 规格
@@ -42,8 +42,8 @@
 
 ### 工作区资源
 
-- `POST /workbenches/{workbench_id}/workspaces`：创建工作区。请求体含 `name`（必选）、`title`（可选）；`name` 在工作台内冲突时返回 `409 Conflict`；成功返回 `201 Created` 与资源表示，并触发”工作区已创建“；
-- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区，支持分页与 `is_active` 过滤；
+- `POST /workbenches/{workbench_id}/workspaces`：创建工作区。请求体含 `name`（必选）、`title`（必选）；`name` 在工作台内冲突时返回 `409 Conflict`；成功返回 `201 Created` 与资源表示，并触发”工作区已创建“；
+- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区，支持分页；
 - `GET /workspaces/{id}`：读取单个工作区；
 - `PATCH /workspaces/{id}`：更新 `title`。
 

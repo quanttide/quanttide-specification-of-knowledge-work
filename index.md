@@ -4,7 +4,7 @@
 
 ## 领域模型
 
-本领域的核心领域模型可概括为 3P 模型，按 Piece、Process、Place 分为三组：Piece 组描述知识工作中被加工与产出的对象，包括材料（Material）与产物（Artifact）；Process 组描述对材料的处理过程，包括任务（Task）与工作流（Workflow）；Place 组描述工作发生的场所，包括工作区（Workspace）与工作台（Workbench）。
+本领域的核心领域模型可概括为 3P 模型，按工件（Piece）、过程（Process）、场所（Place）分为三组：工件组描述知识工作中被加工与产出的对象，包括材料（Material）与产物（Artifact）；过程组描述对材料的处理过程，包括任务（Task）与工作流（Workflow）；场所组描述工作发生的场所，包括工作区（Workspace）与工作台（Workbench）。
 
 ## 领域事件
 

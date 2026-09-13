@@ -29,7 +29,7 @@
 
 ### 事件
 
-- 工作区已创建（Workspace Created）
+- 工作区已创建（`WorkspaceCreated`）
 
 ### 约束
 
@@ -42,10 +42,10 @@
 
 ### 工作区资源
 
-- `POST /workbenches/{workbench_id}/workspaces`：创建工作区。请求体含 `name`（必选）、`title`（必选）；`name` 在工作台内冲突时返回 `409 Conflict`；成功返回 `201 Created` 与资源表示，并触发”工作区已创建“；
-- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区，支持分页；
+- `POST /workbenches/{workbench_id}/workspaces`：创建工作区。
+- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区；
 - `GET /workspaces/{id}`：读取单个工作区；
-- `PATCH /workspaces/{id}`：更新 `title`。
+- `PATCH /workspaces/{id}`：更新工作区信息。
 
 ### 子资源端点
 

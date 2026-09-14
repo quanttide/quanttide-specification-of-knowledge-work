@@ -50,10 +50,10 @@
 
 ### 子资源端点
 
-- `POST /workspaces/{workspace_id}/workorders/{name}/records`：追加一条工作记录。请求自带 `id` 作幂等键；`seq` 与 `step_id` 由账本方分配查填，请求里带了即拒绝。
-- `GET /workspaces/{workspace_id}/workorders/{name}/records`：读取全量流水，按 `seq` 序返回。
-- `GET /workspaces/{workspace_id}/workorders/{name}/records/{record_id}`：读取单条，凭凭证号。
-- `GET /workspaces/{workspace_id}/workorders/{name}/records?step={step}`：按站名筛读。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records`：追加一条工作记录。请求自带 `id` 作幂等键；`seq` 与 `step_id` 由账本方分配查填，请求里带了即拒绝。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records`：读取全量流水，按 `seq` 序返回。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records/{seq}`：读取单条，凭页码——记录没有名字，页码即地址。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records?step={step}`：按站名筛读。
 
 ### 约束
 

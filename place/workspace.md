@@ -41,23 +41,23 @@
 
 ## API端点
 
-工作区建模为 REST 资源。集合端点挂载于工作台之下，以体现一对多层级；单个端点挂载于根路径，便于跨工作台引用。
+工作区建模为 REST 资源，端点全部按名寻址：集合端点挂载于工作台之下，以体现一对多层级；单个端点走同一条名链——名链自带辖区，跨工作台引用不必另开根路径。
 
 ### 工作区资源端点
 
-- `POST /workbenches/{workbench_id}/workspaces`：创建工作区。
-- `GET /workbenches/{workbench_id}/workspaces`：列出工作台下的工作区。
-- `GET /workspaces/{id}`：读取单个工作区。
-- `PATCH /workspaces/{id}`：更新工作区信息。
+- `POST /workbenches/{workbench}/workspaces`：创建工作区。
+- `GET /workbenches/{workbench}/workspaces`：列出工作台下的工作区。
+- `GET /workbenches/{workbench}/workspaces/{workspace}`：读取单个工作区。
+- `PATCH /workbenches/{workbench}/workspaces/{workspace}`：更新工作区信息。
 
 ### 子资源端点
 
 以下端点分别列出区内对象，均支持分页，不在工作区响应中内嵌返回：
 
-- `GET /workspaces/{id}/materials`
-- `GET /workspaces/{id}/workflows`
-- `GET /workspaces/{id}/workorders`
-- `GET /workspaces/{id}/artifacts`
+- `GET /workbenches/{workbench}/workspaces/{workspace}/materials`
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workflows`
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders`
+- `GET /workbenches/{workbench}/workspaces/{workspace}/artifacts`
 
 ### 约束
 

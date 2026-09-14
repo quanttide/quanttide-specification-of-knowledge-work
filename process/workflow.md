@@ -50,9 +50,9 @@
 
 ### 工作流资源端点
 
-- `POST /workspaces/{workspace_id}/workflows`：创建工作流。
-- `GET /workspaces/{workspace_id}/workflows`：列出工作区下的工作流。
-- `GET /workspaces/{workspace_id}/workflows/{name}`：读取单个工作流。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/workflows`：创建工作流。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workflows`：列出工作区下的工作流。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workflows/{workflow}`：读取单个工作流。
 
 ### 子资源端点
 

@@ -54,10 +54,9 @@
 
 ### 资源端点
 
-- `POST /workspaces/{workspace_id}/workorders`：开工单。请求自带 `name`、`workflow`、`start`、`description`；`id`、`workflow_id`、`start_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
-- `GET /workspaces/{workspace_id}/workorders`：列本工作区的工单，支持 `?workflow_id=` 筛读。
-- `GET /workspaces/{workspace_id}/workorders/{name}`：读取工单全貌——封面加全量流水，一次取齐，重放者不必二次请求。
-- `GET /workorders/{id}`：跨区机器凭凭证寻址（归并、审计）——凭全局 `id`，不问工作区。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders`：开工单。请求自带 `name`、`workflow`、`start`、`description`；`id`、`workflow_id`、`start_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders`：列本工作区的工单，支持 `?workflow_id=` 筛读。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}`：读取工单全貌——封面加全量流水，一次取齐，重放者不必二次请求。
 
 ### 子资源端点
 
@@ -79,7 +78,6 @@
 - `order create <名字> --workflow <工作流> --start <站名> [--description 一句话]`：开工单。`id`、`workflow_id`、`start_id`、`created_at` 由账本方查填——不设旗标，想带都没处带；撞上区内同名即拒，不覆盖；起程站不代填，起程是声明的一部分。
 - `order list [--workflow <工作流>] [--json]`：列本工作区的工单，`--workflow` 按名筛读（名字在端侧解析成 `workflow_id`），`--json` 出机读一份。
 - `order show <名字>`：读工单全貌——封面加全量流水一次取齐；进度与下一步由读取方按流水推导，只印不写。
-- `order show --id <uuid>`：凭凭证号寻址（跨区归并、审计用），不问工作区。
 - `order delete <名字>`：删一张白纸——流水非空即拒，账本不销户。
 
 ### 子资源端点

@@ -55,10 +55,9 @@
 
 读路径支持双路寻址：
 
-- `GET /workspaces/{workspace_id}/workflows/{workflow}/steps/{step_id}`：凭全局凭证，给机器与跨区引用；
-- `GET /workspaces/{workspace_id}/workflows/{workflow}/steps?name={name}`：凭站名，给人与账页对账。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/workflows/{workflow}/steps/{step}`：凭站名读一站——步骤名在工作流内唯一，名即地址。
 
 ### 约束
 
-- 两路寻址都只读——步骤的任何变更都走工作流定义的整套读写，没有旁门；
-- `step_id` 不存在即 404，`name` 不存在即 404——不猜近似匹配，引用要么精确成立，要么明确不存在。
+- 只读——步骤的任何变更都走工作流定义的整套读写，没有旁门；
+- 站名不存在即 404——不猜近似匹配，引用要么精确成立，要么明确不存在。

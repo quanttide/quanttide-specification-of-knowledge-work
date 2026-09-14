@@ -55,8 +55,8 @@
 
 读路径支持双路寻址：
 
-- `GET /workspaces/{workspace_id}/workflows/{wf_id}/steps/{step_id}`：凭全局凭证，给机器与跨区引用；
-- `GET /workspaces/{workspace_id}/workflows/{wf_id}/steps?name={name}`：凭站名，给人与账页对账。
+- `GET /workspaces/{workspace_id}/workflows/{workflow}/steps/{step_id}`：凭全局凭证，给机器与跨区引用；
+- `GET /workspaces/{workspace_id}/workflows/{workflow}/steps?name={name}`：凭站名，给人与账页对账。
 
 ### 约束
 

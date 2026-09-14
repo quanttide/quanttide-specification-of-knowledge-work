@@ -12,7 +12,7 @@
 - `description`（String，推荐）：一句话说清这条工作流干什么，默认为空。
 - `steps`（List，必选）：步骤列表，至少一条，顺序即衔接顺序。
 - `steps[].name`（String，必选）：步骤名。
-- `steps[].description`（String，推荐）：这一步做什么，给执行者看，默认为空。
+- `steps[].description`（String，必选）：这一步做什么，给执行者看。
 - `steps[].executor`（String，推荐）：谁做这一步，取 `agent` 或 `human`，缺省 `agent`。
 - `steps[].criteria`（List，推荐）：判据列表，怎么算这一步走完，默认为空。
 - `steps[].criteria[].executor`（String，必选）：谁判这一条，取 `rule`、`agent` 或 `human`。

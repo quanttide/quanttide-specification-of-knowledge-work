@@ -7,11 +7,16 @@
 
 ### 字段
 
-- `id`（String，必选）：凭证号，UUID，系统生成，全局唯一，落笔后永不改变。跨区引用认它——事件负载、跨区归并、审计追踪，一律凭 `id`。
-- `name`（String，必选）：工单名，**工作区内唯一**。人读身份——URL、列表、人话里叫它。名字不跨工作区唯一，也不必：它的辖区就是这一间工作区。
-- `description`（String，推荐）：一句话任务，写这单**要干什么**，给执行的人（含智能体）看。工单侧唯一的自由文本。方向向前说——“迁移旧库到新集群”是任务，“已迁移完成”是结局，结局只许出现在流水里。
-- `workflow_id`（UUID，必选）：所引工作流的全球凭证，**账本方查填**，请求里带了即拒绝。这枚锚是封条的封泥——`workflow_id` 一旦落笔，所引定义即冻结不可变（见 [工作步骤](./work-step.md)），工单流水此后逐站对账，对的是死的。
-- `created_at`（String，必选）：何时开的单。
+- `id`（UUID，必选）：凭证号，系统生成，全局唯一，落笔后永不改变；跨区引用认它（事件负载、跨区归并、审计追踪）。
+- `name`（String，必选）：工单名，工作区内唯一。人读身份——URL、列表、人话里叫它；名字不跨工作区唯一，也不必，它的辖区就是这一间工作区。
+- `description`（String，推荐）：一句话任务，写这单要干什么，给执行的人（含智能体）看。工单侧唯一的自由文本；方向向前说——「迁移旧库到新集群」是任务，「已迁移完成」是结局，结局只许出现在流水里。
+- `workflow`（String，必选）：所引工作流名，须是本工作区内存在的工作流（区内按名解析，见 [工作区](../place/workspace.md)）。
+- `workflow_id`（UUID，必选）：所引工作流的全球凭证，账本方查填，请求里带了即拒绝；一经落笔，所引定义即冻结（见 [工作步骤](./work-step.md)）。
+- `start`（String，必选）：起程站名，须是所引工作流内的步骤名。
+- `start_id`（UUID，必选）：起程站的全球凭证，账本方查填，请求里带了即拒绝。
+- `gates`（List，推荐）：闸门项，等人拍板的事项，每项按名指认一站（`gates[].step`），默认为空。
+- `records`（List，必选）：流水，只增不改，内嵌的工作记录序列（见 [工作记录](./work-record.md)），起单时为空。
+- `created_at`（Datetime，只读）：开单时刻，账本方生成。
 
 ### 关联
 
@@ -50,10 +55,10 @@
 
 ### 资源端点
 
-- `POST /workspaces/{workspace_id}/workorders`：开工单。请求自带 `name`、`workflow`、`start`、`description`、`created_at`；`id`、`workflow_id`、`start_id` 由账本方查填，请求里带了即拒绝——凡账本发的号，不许提交者带。
+- `POST /workspaces/{workspace_id}/workorders`：开工单。请求自带 `name`、`workflow`、`start`、`description`；`id`、`workflow_id`、`start_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
 - `GET /workspaces/{workspace_id}/workorders`：列本工作区的工单，支持 `?workflow_id=` 筛读。
 - `GET /workspaces/{workspace_id}/workorders/{name}`：读取工单全貌——封面加全量流水，一次取齐，重放者不必二次请求。
-- `GET /workspaces/{workspace_id}/workorders?id={id}`：跨区机器凭凭证寻址。
+- `GET /workorders/{id}`：跨区机器凭凭证寻址（归并、审计）——凭全局 `id`，不问工作区。
 
 ### 子资源端点
 

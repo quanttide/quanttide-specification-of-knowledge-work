@@ -8,19 +8,10 @@
 
 工作流落成一份 YAML 文件，文件名即工作流名：
 
+- `id`（UUID，必选）：全球凭证，定义侧创建时生成，全局唯一，永不重发；工单封面的 `workflow_id` 查填认它。
 - `name`（String，必选）：工作流名，在其所属工作区内唯一。
 - `description`（String，推荐）：一句话说清这条工作流干什么，默认为空。
-- `steps`（List，必选）：步骤列表，至少一条，顺序即衔接顺序。
-- `steps[].name`（String，必选）：步骤名。
-- `steps[].description`（String，必选）：这一步做什么，给执行者看。
-- `steps[].type`（String，推荐）：这一步是哪类流程——`rule` 由程序执行，`agent` 由智能体执行，`human` 由人执行；缺省 `agent`。
-- `steps[].criteria`（List，推荐）：判据列表，怎么算这一步走完，默认为空。
-- `steps[].criteria[].executor`（String，必选）：谁判这一条，取 `rule`、`agent` 或 `human`。
-- `steps[].criteria[].description`（String，推荐）：给智能体或人的判准，默认为空；省了按判法生成一句。
-- `steps[].criteria[].path`（String，推荐）：`rule` 判法，取路径存在。
-- `steps[].criteria[].absent`（String，推荐）：`rule` 判法，取路径不存在。
-- `steps[].criteria[].file` 与 `contains`（String，推荐）：`rule` 判法，成对写，取文件含这段文字。
-- `steps[].criteria[].run`（String，推荐）：`rule` 判法，取命令退出码为零。
+
 
 ### 关联
 

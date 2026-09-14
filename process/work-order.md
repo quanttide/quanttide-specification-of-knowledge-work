@@ -11,7 +11,6 @@
 - `name`（String，必选）：工单名，工作区内唯一。人读身份——URL、列表、人话里叫它；名字不跨工作区唯一，也不必，它的辖区就是这一间工作区。
 - `description`（String，推荐）：一句话任务，写这单要干什么，给执行的人（含智能体）看。工单侧唯一的自由文本；方向向前说——「迁移旧库到新集群」是任务，「已迁移完成」是结局，结局只许出现在流水里。
 - `workflow_id`（UUID，必选）：所引工作流的全球凭证，账本方查填，请求里带了即拒绝；一经落笔，所引定义即冻结（见 [工作步骤](./work-step.md)）。
-- `gates`（List，推荐）：闸门项，等人拍板的事项，开单时随封面一次写定，默认为空（见 [闸门项](./work-gate.md)）。
 - `created_at`（Datetime，只读）：开单时刻，账本方生成。
 
 ### 关联
@@ -22,12 +21,12 @@
 
 对流水，是封面：`records` 内嵌于工单，随工单存取；流水的读写走工作记录的子资源端点（见 [工作记录](./work-record.md)），工单本体不开流水的写口。
 
-工单的「走完」是一段推导，不是一枚字段：流水对照定义逐站对账——从首站起，每个必经步骤都有 `is_succeeded` 为 `true` 的记录、闸门步骤的放行出自人，两条齐了，这单走完。结论随时可重算，无须任何人在任何地方「标记完成」——完成不是动作，是事实。
+工单的「走完」是一段推导，不是一枚字段：流水对照定义逐站对账——从首站起，每个必经步骤都有 `is_succeeded` 为 `true` 的记录；带 `human` 判据的闸门步骤，通过须出自人——两条齐了，这单走完。结论随时可重算，无须任何人在任何地方「标记完成」——完成不是动作，是事实。
 
 ### 约束
 
 - 字段取值之外一律拒绝：不认识的字段、缺必填字段，均视为不合语法；
-- 封面落笔即封：`workflow`、`workflow_id`、`description`、`gates` 一经创建不可改——改任务、换行程，另开工单，旧单留档；
+- 封面落笔即封：`workflow`、`workflow_id`、`description` 一经创建不可改——改任务、换行程，另开工单，旧单留档；
 - `name` 工作区内唯一，`id` 全局唯一，重名撞号即不合语法；
 - 有账不销：流水非空的工单不可删除——账本不销户；流水为空的工单（开了单没动工）可删，删的是一张白纸，不欠历史任何东西；
 - 进度与完结只许推导，不许落字段：任何把推导结论写回工单的动作，均视为不合语法。
@@ -48,7 +47,7 @@
 
 ### 资源端点
 
-- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders`：开工单。请求自带 `name`、`workflow`、`description`、`gates`；`id`、`workflow_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders`：开工单。请求自带 `name`、`workflow`、`description`；`id`、`workflow_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
 - `GET /workbenches/{workbench}/workspaces/{workspace}/workorders`：列本工作区的工单，支持 `?workflow_id=` 筛读。
 - `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}`：读取工单全貌——封面加全量流水，一次取齐，重放者不必二次请求。
 
@@ -69,7 +68,7 @@
 
 ### 资源端点
 
-- `order create <名字> --workflow <工作流> [--description 一句话] [--gate <站>:<拍板事项>]…`：开工单，`--gate` 可重复、随封面写定。`id`、`workflow_id`、`created_at` 由账本方查填——不设旗标，想带都没处带；撞上区内同名即拒，不覆盖。
+- `order create <名字> --workflow <工作流> [--description 一句话]`：开工单。`id`、`workflow_id`、`created_at` 由账本方查填——不设旗标，想带都没处带；撞上区内同名即拒，不覆盖。
 - `order list [--workflow <工作流>] [--json]`：列本工作区的工单，`--workflow` 按名筛读（名字在端侧解析成 `workflow_id`），`--json` 出机读一份。
 - `order show <名字>`：读工单全貌——封面加全量流水一次取齐；进度与下一步由读取方按流水推导，只印不写。
 - `order delete <名字>`：删一张白纸——流水非空即拒，账本不销户。

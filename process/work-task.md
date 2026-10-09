@@ -1,6 +1,6 @@
 # 工作任务
 
-工作任务（WorkOrder）是一次行程的封面：一张账本，封皮上写着走哪条工作流，内页是流水。工作任务是账本的户头——只增不改的纪律从封面贯彻到内页：封面落笔即封，内页只进不出（见 [工作记录](./work-record.md)）。
+工作任务（WorkTask）是一次行程的封面：一张账本，封皮上写着走哪条工作流，内页是流水。工作任务是账本的户头——只增不改的纪律从封面贯彻到内页：封面落笔即封，内页只进不出（见 [工作记录](./work-record.md)）。
 工作任务没有状态字段：走到哪一步、走完没走完，由流水对照定义推导，不落字段、不发事件。
 
 ## 领域属性
@@ -36,7 +36,7 @@
 
 ### 事件
 
-- 工作任务已创建（`WorkOrderCreated`）
+- 工作任务已创建（`WorkTaskCreated`）
 
 ### 约束
 
@@ -48,9 +48,9 @@
 
 ### 资源端点
 
-- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders`：开工作任务。请求自带 `name`、`workflow`、`description`；`id`、`workflow_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders`：列本工作区的工作任务，支持 `?workflow_id=` 筛读。
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}`：读取工作任务全貌——封面加全量流水，一次取齐，重放者不必二次请求。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/worktasks`：开工作任务。请求自带 `name`、`workflow`、`description`；`id`、`workflow_id`、`created_at` 由账本方查填生成，请求里带了即拒绝——凡账本发的号，不许提交者带。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks`：列本工作区的工作任务，支持 `?workflow_id=` 筛读。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks/{task}`：读取工作任务全貌——封面加全量流水，一次取齐，重放者不必二次请求。
 
 ### 子资源端点
 

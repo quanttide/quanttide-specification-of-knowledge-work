@@ -17,7 +17,7 @@
 
 ### 关联
 
-一个工作区包含零至多个工作流（Workflow）、工作任务（WorkOrder）、产物（Artifact）、材料（Material）；关联通过子资源端点暴露与遍历，不作为内嵌字段随工作区响应返回。
+一个工作区包含零至多个工作流（Workflow）、工作任务（WorkTask）、产物（Artifact）、材料（Material）；关联通过子资源端点暴露与遍历，不作为内嵌字段随工作区响应返回。
 
 区内按名字互相引用：工作任务的 `workflow` 字段是一个名字，在区内解析到同名工作流，名字的作用域即工作区。
 
@@ -56,7 +56,7 @@
 
 - `GET /workbenches/{workbench}/workspaces/{workspace}/materials`
 - `GET /workbenches/{workbench}/workspaces/{workspace}/workflows`
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders`
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks`
 - `GET /workbenches/{workbench}/workspaces/{workspace}/artifacts`
 
 ### 约束

@@ -1,6 +1,6 @@
 # 工作记录
 
-工作记录（WorkRecord）是工作任务流水里的一条：什么时候、哪一站、一句话、过没过。流水是工作任务的账，工作记录是账上的一笔——只增不改，一条记一件事（见 [工作任务](./work-order.md)）。
+工作记录（WorkRecord）是工作任务流水里的一条：什么时候、哪一站、一句话、过没过。流水是工作任务的账，工作记录是账上的一笔——只增不改，一条记一件事（见 [工作任务](./work-task.md)）。
 
 工作记录与工作步骤是一对镜像（见 [工作步骤](./work-step.md)）：步骤说打算，记录说交代。
 
@@ -8,12 +8,12 @@
 
 ### 字段
 
-工作记录内嵌在工作任务的 `records` 字段里（见 [工作任务](./work-order.md)）：
+工作记录内嵌在工作任务的 `records` 字段里（见 [工作任务](./work-task.md)）：
 
 - `id`（UUID，必选）：凭证号，追加方生成，工作任务内唯一，落笔后永不改变。引用认它——闸门放行、事件负载、审计引用一律凭 `id`，不凭位置。
 - `seq`（Int，必选）：页码，账本方分配，工作任务内自 1 起严格递增不跳号。排序认它——展示与遍历按 `seq`，UUID 无序，不排序。
 - `created_at`（Datetime，必选）：什么时候。取步骤发生的时刻，不取落笔时刻——流水是证据链，证据答「何时发生」，不答「何时录入」。
-- `order_id`（UUID，必选）：所属工作任务的 `id`。
+- `task_id`（UUID，必选）：所属工作任务的 `id`。
 - `step_id`（UUID，必选）：这一站的全球凭证，与 `step` 指同一站。跨边界的机器锚点——下游投影、事件归并凭它直认，不必回查定义；追加时由账本对账查填，落笔后永不失配。
 - `description`（String，推荐）：一句话证词，记这一步已发生之事，给事后重放的人看，默认为空。这是工作记录唯一的自由文本——凡能封闭回答的都已是结构字段，进不了结构的到此为止。
 - `is_succeeded`（Bool，推荐）：过没过，缺省 `false`——没记录「过」，就当作没过。
@@ -52,10 +52,10 @@
 
 ### 子资源端点
 
-- `POST /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records`：追加一条工作记录。请求自带 `id` 作幂等键；`seq` 与 `step_id` 由账本方分配查填，请求里带了即拒绝。
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records`：读取全量流水，按 `seq` 序返回。
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records/{seq}`：读取单条，凭页码——记录没有名字，页码即地址。
-- `GET /workbenches/{workbench}/workspaces/{workspace}/workorders/{order}/records?step={step}`：按站名筛读。
+- `POST /workbenches/{workbench}/workspaces/{workspace}/worktasks/{task}/records`：追加一条工作记录。请求自带 `id` 作幂等键；`seq` 与 `step_id` 由账本方分配查填，请求里带了即拒绝。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks/{task}/records`：读取全量流水，按 `seq` 序返回。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks/{task}/records/{seq}`：读取单条，凭页码——记录没有名字，页码即地址。
+- `GET /workbenches/{workbench}/workspaces/{workspace}/worktasks/{task}/records?step={step}`：按站名筛读。
 
 ### 约束
 
